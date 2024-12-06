@@ -17,13 +17,13 @@ func PinjamanRepositoryImpl(db *gorm.DB) *repository {
 }
 
 func (r *repository) CreatePinjaman(module model.Pinjaman) error {
-	err := r.db.Debug().Exec(`insert into pinjaman(id_tenor ,id_user , date , limit_saldo) VALUES(? , ? , ?)`, module.IdTenor, module.IdUser , module.Date , module.LimitSaldo).Error
+	err := r.db.Debug().Exec(`insert into pinjaman(id_tenor ,id_user , date , limit_saldo , cicilan) VALUES(? , ? , ? ,? , ?)`, module.IdTenor, module.IdUser , module.Date , module.LimitSaldo, module.Cicilan).Error
 
 	return err
 }
 
 func (r *repository) UpdatePinjaman(module model.Pinjaman) error {
-	err := r.db.Debug().Exec(`update pinjaman set limit_saldo = ? `, module.LimitSaldo).Where(`id_tenor = ? and id_user = ?`, module.IdTenor , module.IdUser).Error
+	err := r.db.Debug().Exec(`update pinjaman set limit_saldo = ? , cicilan = ?`, module.LimitSaldo, module.Cicilan).Where(`id_tenor = ? and id_user = ?`, module.IdTenor , module.IdUser).Error
 
 	return err
 }
@@ -34,3 +34,5 @@ func (r *repository) GetPinjamanByIdUser(id_user uint) (model.Pinjaman, error) {
 
 	return data , err
 }
+
+

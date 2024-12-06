@@ -15,4 +15,5 @@ func UserRouter(e *echo.Group) {
 	uc := usecase.UserUsecaseImpl(userRepo)
 
 	e.POST("/upload/profile/picture", middleware.Auth(middleware.UploadFile(uc.UploadProfile)))
+	e.GET("/profile", middleware.Auth(uc.GetProfile))
 }

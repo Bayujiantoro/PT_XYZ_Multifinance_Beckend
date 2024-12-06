@@ -17,4 +17,5 @@ func PinjamanRoutes(e *echo.Group) {
 	uc := usecase.PinjamanUsecaseImpl(PinjamanRepo,UserRepo,TenorRepo )
 
 	e.POST("/pinjaman/create", middleware.Auth(uc.CreatePinjaman))
+	e.GET("/pinjaman", middleware.Auth(uc.GetPinjaman))
 }

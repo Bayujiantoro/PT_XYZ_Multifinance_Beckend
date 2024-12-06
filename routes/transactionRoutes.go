@@ -15,8 +15,13 @@ func TransactionRouter(e *echo.Group) {
 	PinjamanRepo := repositories.PinjamanRepositoryImpl(connection.DB)
 	TenorRepo := repositories.TenorRepositoryImpl(connection.DB)
 	ProductRepo := repositories.ProductRepositoryImpl(connection.DB)
-	uc := usecase.TransactionUsecaseImpl(transactionRepo, userRepo , PinjamanRepo , TenorRepo , ProductRepo)
+	pembayaran := repositories.PembayaranRepositoryImpl(connection.DB)
+
+	uc := usecase.TransactionUsecaseImpl(transactionRepo, userRepo , PinjamanRepo , TenorRepo , ProductRepo, pembayaran)
 
 	e.GET("/transaction", middleware.Auth(uc.ListTransaction))
+	e.GET("/product", uc.ListProduct)
+	e.GET("/list/pembayaran", middleware.Auth(uc.ListPembayaran))
 	e.POST("/transaction/create" , middleware.Auth(uc.CreateTransaction))
+	e.POST("/pembayaran" , middleware.Auth(uc.PembayaranCicilan))
 }

@@ -16,7 +16,7 @@ func TransactionRepositoryImpl(db *gorm.DB) *repository {
 }
 
 func (r *repository) CreateTransaction(module model.Transaction) error {
-	err := r.db.Debug().Exec(`insert into Transaction(nomor_kontak, otr , admin_fee , jumlah_cicilan , jumlah_bunga , nama_asset , id_user , id_product) VALUES (? , ? , ? , ?, ?, ?,?,? )`, module.NomorKontak , module.OTR , module.AdminFee , module.JumlahCicilan , module.JumlahBunga , module.NamaAsset , module.IdUser , module.IdProduct).Error
+	err := r.db.Debug().Exec(`insert into Transaction( id_transaction ,nomor_kontak, otr , admin_fee , jumlah_cicilan , jumlah_bunga , nama_asset , id_user , id_product) VALUES (?, ? , ? , ? , ?, ?, ?,?,? )` , module.IdTransaction, module.NomorKontak , module.OTR , module.AdminFee , module.JumlahCicilan , module.JumlahBunga , module.NamaAsset , module.IdUser , module.IdProduct).Error
 
 	return err
 }

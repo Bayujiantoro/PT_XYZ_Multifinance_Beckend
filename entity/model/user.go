@@ -20,3 +20,6 @@ type Users struct {
 func (Users) TableName() string {
 	return "Users"
 }
+
+
+   

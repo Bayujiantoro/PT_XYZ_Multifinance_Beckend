@@ -9,6 +9,7 @@ import (
 type ProductRepository interface {
 	CreateProduct(module model.Product) error 
 	GetProductByIdProduct(idProduct uint) (model.Product , error)
+	GetProduct() ([]model.Product , error)
 }
 
 
@@ -20,6 +21,13 @@ func (r *repository) GetProductByIdProduct(idProduct uint) (model.Product , erro
 	data := model.Product{}
 
 	err := r.db.Debug().Model(&model.Product{}).Where(`id_product = ?`, idProduct).Find(&data).Error
+
+	return data , err
+}
+func (r *repository) GetProduct() ([]model.Product , error) {
+	data := []model.Product{}
+
+	err := r.db.Debug().Model(&model.Product{}).Find(&data).Error
 
 	return data , err
 }

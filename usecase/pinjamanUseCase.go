@@ -48,20 +48,24 @@ func (h *PinjamanUsecase) CreatePinjaman(c echo.Context) error {
 		})
 	}
 
-	tenor, err := h.TenorRepo.GetTenorByIdTenor(int(request.IdTenor))
+	tenorCreate := model.Tenor{
+		Tenor:  request.Tenor,
+		Limit:  float64(request.LimitSaldo),
+		IdUser: uint(userID),
+	}
+
+	tenor , err := h.TenorRepo.CreateTenor(tenorCreate)
 
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, map[string]interface{}{
 			"message": err.Error(),
 		})
 	}
-
 	pinjaman := model.Pinjaman{
-		IdTenor:    request.IdTenor,
+		IdTenor: tenor.IdTenor,
 		IdUser:     user.Id,
 		Date:       time.Now(),
-		LimitSaldo: tenor.Limit,
-		
+		LimitSaldo: float64(request.LimitSaldo),
 	}
 
 	err_create := h.PinjamanRepo.CreatePinjaman(pinjaman)
@@ -70,8 +74,9 @@ func (h *PinjamanUsecase) CreatePinjaman(c echo.Context) error {
 			"message": err_create.Error(),
 		})
 	}
+
 	return c.JSON(http.StatusOK, map[string]interface{}{
-		"message": "sucess",
+		"data": pinjaman,
 	})
 
 }
@@ -98,10 +103,10 @@ func (h *PinjamanUsecase) GetPinjaman(c echo.Context) error {
 	data := response.PinjamanResponse{
 		IdTenor:    pinjaman.IdTenor,
 		Date:       pinjaman.Date,
-		LimitSaldo: pinjaman.LimitSaldo,
+		LimitSaldo: int(pinjaman.LimitSaldo),
 	}
 
-	return c.JSON(http.StatusOK,  map[string]interface{}{
+	return c.JSON(http.StatusOK, map[string]interface{}{
 		"data": data,
 	})
 }
