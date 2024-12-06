@@ -118,14 +118,6 @@ func (h *TransactionUsecase) CreateTransaction(c echo.Context) error {
 	}
 
 	admin := (2 * product.Price) / 100
-
-	// tenorCount := float64(tenor.Tenor) / 12.0
-	// if tenor.Tenor == 0 {
-	// 	return c.JSON(http.StatusBadRequest, map[string]interface{}{
-	// 		"message": "Tenor tidak boleh 0",
-	// 	})
-	// }
-	// fmt.Println(tenor)
 	
 	otr := product.Price 
 
@@ -159,7 +151,7 @@ func (h *TransactionUsecase) CreateTransaction(c echo.Context) error {
 	update_pinjaman := model.Pinjaman{
 		IdTenor: pinjaman.IdTenor,
 		IdUser: uint(userID),
-		LimitSaldo: pinjaman.LimitSaldo - otr,
+		LimitSaldo: pinjaman.LimitSaldo - (otr  + int(jumlah_bunga) + int(Jumah_cicilan)),
 		
 	}
 	err_pinjaman := h.PinjamanRepo.UpdatePinjaman(update_pinjaman)
@@ -179,6 +171,7 @@ func (h *TransactionUsecase) CreateTransaction(c echo.Context) error {
 		JumlahCicilan: int(Jumah_cicilan),
 		JumlahBunga: int(jumlah_bunga),
 		NamaAsset: product.NameProduct,
+		TotalPembayaran: float64(otr)  + jumlah_bunga + Jumah_cicilan,
 	}
 	return c.JSON(http.StatusOK,  map[string]interface{}{
 		"data": data,

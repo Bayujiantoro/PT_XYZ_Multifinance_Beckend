@@ -11,4 +11,5 @@ type TransactionResponse struct {
 	JumlahCicilan int `json:"jumlah_cicilan"`
 	JumlahBunga int `json:"jumlah_bunga"`
 	NamaAsset string `json:"nama_asset"`
+	TotalPembayaran float64 `json:"total_pembayaran"`
 }
